@@ -1,7 +1,16 @@
 /* eslint-disable */
+const path = require("path");
+const webpack = require("webpack");
 
-var path = require("path");
-var webpack = require("webpack");
+const PATHS = {
+  images: path.join(__dirname, 'images'),
+  presentation: [
+    path.join(__dirname, 'index.js'),
+    path.join(__dirname, 'images', 'index.js'),
+    path.join(__dirname, 'presentation'),
+    path.join(__dirname, 'node_modules', 'react-tweet-embed')
+  ]
+};
 
 module.exports = {
   devtool: "source-map",
@@ -15,6 +24,14 @@ module.exports = {
     filename: "bundle.js",
     publicPath: "/dist/"
   },
+  resolve: {
+    extensions: ['', '.jsx', '.js']
+  },
+  resolveLoader: {
+    alias: {
+      content: path.join(__dirname, 'loaders', 'content')
+    }
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
@@ -25,42 +42,28 @@ module.exports = {
       loader: "html-loader!markdown-loader?gfm=false"
     }, {
       test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
       loader: "babel-loader",
-      query: {
-        presets:['react', 'es2015'],
-        env: {
-          development: {
-            plugins: [["react-transform", {
-              transforms: [{
-                transform: "react-transform-hmr",
-                imports: ["react"],
-                locals: ["module"]
-              }]
-            }]]
-          }
-        }
-      }
+      include: PATHS.presentation
     }, {
       test: /\.css$/,
       loaders: ["style", "raw"],
       include: __dirname
     }, {
+      test: /\.gif$/,
+      loader: "url?limit=10000&mimetype=image/svg+xml",
+      include: PATHS.images
+    }, {
       test: /\.svg$/,
       loader: "url?limit=10000&mimetype=image/svg+xml",
-      include: path.join(__dirname, "assets")
+      include: PATHS.images
     }, {
       test: /\.png$/,
-      loader: "url-loader?mimetype=image/png",
-      include: path.join(__dirname, "assets")
-    }, {
-      test: /\.gif$/,
-      loader: "url-loader?mimetype=image/gif",
-      include: path.join(__dirname, "assets")
+      loader: "url-loader?limit=10000mimetype=image/png",
+      include: PATHS.images
     }, {
       test: /\.jpg$/,
-      loader: "url-loader?mimetype=image/jpg",
-      include: path.join(__dirname, "assets")
+      loader: "url-loader?limit=10000mimetype=image/jpg",
+      include: PATHS.images
     }]
   }
 };
