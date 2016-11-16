@@ -226,7 +226,13 @@ export default class Presentation extends React.Component {
             />
           </Slide>
 
-
+          <Slide transition={slideTransition}>
+            <Heading size={4}>
+              Gotchas
+            </Heading>
+            <Appear><ListItem>To use <code>require(..</code> you need node types: </ListItem></Appear>
+            <Appear><ListItem>Run <code>npm install @types/node --save-dev</code></ListItem></Appear>
+          </Slide>
           <Slide transition={slideTransition}>
             <Link href="https://www.youtube.com/channel/UC0XiDgtbFR8ohoGlstuFgGQ">
               <Heading size={1}>
